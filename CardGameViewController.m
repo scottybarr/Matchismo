@@ -48,9 +48,21 @@
 
 - (IBAction)flipCard:(UIButton *)sender {
     self.lastCard = _nextcard;
+    UIColor *redCardColor = [UIColor redColor];
+    UIColor *blackCardColor = [UIColor blackColor];
+    UIColor *nextCardColor = blackCardColor;
+    
     if (!sender.isSelected) {
         _nextcard = [self.deck drawRandomCard].contents;
         [sender setTitle:_nextcard forState:UIControlStateSelected];
+        
+        if ([_nextcard rangeOfString:@"♥" ].location != NSNotFound || [_nextcard rangeOfString:@"♦"].location != NSNotFound)
+        {
+            nextCardColor = redCardColor;
+        }
+        
+        [sender setTitleColor:nextCardColor forState:UIControlStateSelected];
+        
     }
     sender.selected = !sender.isSelected;
     self.flipCount++;
