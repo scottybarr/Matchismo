@@ -41,27 +41,30 @@
     if (lastCard) {
         _lastCard = lastCard;
         self.lastCardDrawnLabel.text = [NSString stringWithFormat:@"Last: %@", self.lastCard];
+        self.lastCardDrawnLabel.textColor = [self nextCardColor:(NSString *)_lastCard];
     } else {
         self.lastCardDrawnLabel.text = [NSString stringWithFormat:@"Last: N/A"];
     }
 }
 
+- (UIColor *)nextCardColor:(NSString *)nextcard
+{
+    if ([_nextcard rangeOfString:@"♥" ].location != NSNotFound || [_nextcard rangeOfString:@"♦"].location != NSNotFound)
+    {
+        return [UIColor redColor];
+    }
+    return [UIColor blackColor];
+}
+
 - (IBAction)flipCard:(UIButton *)sender {
     self.lastCard = _nextcard;
-    UIColor *redCardColor = [UIColor redColor];
-    UIColor *blackCardColor = [UIColor blackColor];
-    UIColor *nextCardColor = blackCardColor;
+    UIColor *cardColor = nil;
     
     if (!sender.isSelected) {
         _nextcard = [self.deck drawRandomCard].contents;
+        cardColor = [self nextCardColor:(NSString *) _nextcard];
         [sender setTitle:_nextcard forState:UIControlStateSelected];
-        
-        if ([_nextcard rangeOfString:@"♥" ].location != NSNotFound || [_nextcard rangeOfString:@"♦"].location != NSNotFound)
-        {
-            nextCardColor = redCardColor;
-        }
-        
-        [sender setTitleColor:nextCardColor forState:UIControlStateSelected];
+        [sender setTitleColor:cardColor forState:UIControlStateSelected];
         
     }
     sender.selected = !sender.isSelected;
